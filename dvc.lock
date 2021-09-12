@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/train.csv data/test.csv
+    deps:
+    - path: data/test.csv
+      md5: ff248529f207ea164d73636e5b1b251d
+      size: 420783
+    - path: data/train.csv
+      md5: f147942c91d00d754503775341d13682
+      size: 987712
+    - path: src/prepare.py
+      md5: f1b33ab77d1daa0b5ede8676e998f450
+      size: 2194
+    params:
+      params.yaml:
+        prepare.seed: 20170428
+        prepare.split: 0.2
+    outs:
+    - path: data/prepared
+      md5: e8a83fde9521d31235b4558a4f22818a.dir
+      size: 378304
+      nfiles: 2
