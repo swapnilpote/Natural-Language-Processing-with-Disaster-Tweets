@@ -36,12 +36,12 @@ def clean_text(text: str) -> str:
     Returns:
         str: [description]
     """
-    symbols = re.findall("[^a-zA-Z0-9'\\s]", text)
+    symbols = re.findall("[^a-zA-Z0-9#@'\\s]", text)
 
     for sym in symbols:
         text = text.replace(sym, f" {sym} ")
 
-    return text
+    return text.lower()
 
 
 def main(file_path: str, data_type: str = "train") -> None:
@@ -56,11 +56,11 @@ def main(file_path: str, data_type: str = "train") -> None:
 
     try:
         # Drop unnecessary columns
-        df.drop(["id", "keyword", "location"], inplace=True, axis=1)
+        df = df.drop(["keyword", "location"], axis=1)
 
         # Clean text by separating special characteres from words
         df["text"] = df["text"].apply(clean_text)
-        df["text"] = df["text"].apply(lambda x: re.sub(" +", " ", x))
+        df["text"] = df["text"].apply(lambda x: ' '.join(x.split()))
 
         # Generating root word using lemmatization technique
         lemmatizer = WordNetLemmatizer()
@@ -69,15 +69,17 @@ def main(file_path: str, data_type: str = "train") -> None:
         )
 
         if data_type == "train":
-            train, valid = train_test_split(df, test_size=split, random_state=seed)
-            train.to_csv(output_train)
-            valid.to_csv(output_valid)
+            train, valid = train_test_split(df,
+                                            test_size=split,
+                                            random_state=seed)
+            train.to_csv(output_train, index=False)
+            valid.to_csv(output_valid, index=False)
         else:
-            df.to_csv(output_test)
+            df.to_csv(output_test, index=False)
 
     except Exception as ex:
         sys.stderr.write(ex)
 
 
 main(train_input)
-main(test_input)
+main(test_input, data_type="test")
