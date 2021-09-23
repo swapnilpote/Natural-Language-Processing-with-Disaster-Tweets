@@ -10,14 +10,33 @@ stages:
       md5: f147942c91d00d754503775341d13682
       size: 987712
     - path: src/prepare.py
-      md5: f1b33ab77d1daa0b5ede8676e998f450
-      size: 2194
+      md5: 3d442b87126c59e48d27ad3bbe308403
+      size: 2333
     params:
       params.yaml:
         prepare.seed: 20170428
         prepare.split: 0.2
     outs:
     - path: data/prepared
-      md5: e8a83fde9521d31235b4558a4f22818a.dir
-      size: 378304
-      nfiles: 2
+      md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
+      size: 1268657
+      nfiles: 3
+  featurize:
+    cmd: python src\featurization.py data\prepared data\features
+    deps:
+    - path: data\prepared
+      md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
+      size: 1268657
+      nfiles: 3
+    - path: src\featurization.py
+      md5: 4ec7cfca4e1f3ec7cdd55dccb8ae3e26
+      size: 1872
+    params:
+      params.yaml:
+        featurize.max_features: 3000
+        featurize.ngrams: 2
+    outs:
+    - path: data\features
+      md5: d95b9b6108a8f80d99d4d29f10ac1319.dir
+      size: 2457837
+      nfiles: 4
