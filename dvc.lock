@@ -22,13 +22,13 @@ stages:
       size: 1268657
       nfiles: 3
   featurize:
-    cmd: python src\featurization.py data\prepared data\features
+    cmd: python src/featurization.py data/prepared data/features
     deps:
-    - path: data\prepared
+    - path: data/prepared
       md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
       size: 1268657
       nfiles: 3
-    - path: src\featurization.py
+    - path: src/featurization.py
       md5: 4ec7cfca4e1f3ec7cdd55dccb8ae3e26
       size: 1872
     params:
@@ -36,7 +36,7 @@ stages:
         featurize.max_features: 3000
         featurize.ngrams: 2
     outs:
-    - path: data\features
-      md5: d95b9b6108a8f80d99d4d29f10ac1319.dir
+    - path: data/features
+      md5: d79d61c1117eb2737c18bfd30b091578.dir
       size: 2457837
       nfiles: 4
