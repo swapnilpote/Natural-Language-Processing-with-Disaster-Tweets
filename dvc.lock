@@ -1,15 +1,15 @@
 schema: '2.0'
 stages:
   prepare:
-    cmd: python src/prepare.py data/train.csv data/test.csv
+    cmd: python src\prepare.py data\train.csv data\test.csv
     deps:
-    - path: data/test.csv
+    - path: data\test.csv
       md5: ff248529f207ea164d73636e5b1b251d
       size: 420783
-    - path: data/train.csv
+    - path: data\train.csv
       md5: f147942c91d00d754503775341d13682
       size: 987712
-    - path: src/prepare.py
+    - path: src\prepare.py
       md5: 3d442b87126c59e48d27ad3bbe308403
       size: 2333
     params:
@@ -17,18 +17,18 @@ stages:
         prepare.seed: 20170428
         prepare.split: 0.2
     outs:
-    - path: data/prepared
+    - path: data\prepared
       md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
       size: 1268657
       nfiles: 3
   featurize:
-    cmd: python src/featurization.py data/prepared data/features
+    cmd: python src\featurization.py data\prepared data\features
     deps:
-    - path: data/prepared
+    - path: data\prepared
       md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
       size: 1268657
       nfiles: 3
-    - path: src/featurization.py
+    - path: src\featurization.py
       md5: 4ec7cfca4e1f3ec7cdd55dccb8ae3e26
       size: 1872
     params:
@@ -36,24 +36,24 @@ stages:
         featurize.max_features: 3000
         featurize.ngrams: 2
     outs:
-    - path: data/features
-      md5: d79d61c1117eb2737c18bfd30b091578.dir
+    - path: data\features
+      md5: d95b9b6108a8f80d99d4d29f10ac1319.dir
       size: 2457837
       nfiles: 4
   train:
-    cmd: python src/train.py data/prepared data/features model.pkl
+    cmd: python src\train.py data\prepared data\features model.pkl
     deps:
-    - path: data/features
-      md5: d79d61c1117eb2737c18bfd30b091578.dir
+    - path: data\features
+      md5: d95b9b6108a8f80d99d4d29f10ac1319.dir
       size: 2457837
       nfiles: 4
-    - path: data/prepared
+    - path: data\prepared
       md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
       size: 1268657
       nfiles: 3
-    - path: src/train.py
-      md5: 3653b2c4d50ff5479ada9cfec09d3afa
-      size: 1269
+    - path: src\train.py
+      md5: cdc7dabb97717b921ec669a8a1727a10
+      size: 1249
     params:
       params.yaml:
         train.min_split: 64
@@ -63,3 +63,31 @@ stages:
     - path: model.pkl
       md5: 05764f6a28dceee56f795770abfa7291
       size: 11017752
+  evaluate:
+    cmd: python src\evaluate.py model.pkl data\prepared data\features metrics\scores.json
+      metrics\prc.json metrics\roc.json
+    deps:
+    - path: data\features
+      md5: d95b9b6108a8f80d99d4d29f10ac1319.dir
+      size: 2457837
+      nfiles: 4
+    - path: data\prepared
+      md5: 6d5fe10fb9af5ba7200af3260deaef61.dir
+      size: 1268657
+      nfiles: 3
+    - path: model.pkl
+      md5: 05764f6a28dceee56f795770abfa7291
+      size: 11017752
+    - path: src\evaluate.py
+      md5: 650d7818a3f5095add919c7073087d87
+      size: 2171
+    outs:
+    - path: metrics\prc.json
+      md5: 2617d728662f40b65ffc13549cd5e2a0
+      size: 293
+    - path: metrics\roc.json
+      md5: 8f898d3fbaed0ab48780269a6d74878c
+      size: 362
+    - path: metrics\scores.json
+      md5: 0b99c5379f4bbf379c8f93de7d86ad5a
+      size: 75

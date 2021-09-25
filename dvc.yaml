@@ -1,34 +1,55 @@
 stages:
   prepare:
-    cmd: python src/prepare.py data/train.csv data/test.csv
+    cmd: python src\prepare.py data\train.csv data\test.csv
     deps:
-      - data/test.csv
-      - data/train.csv
-      - src/prepare.py
+      - data\test.csv
+      - data\train.csv
+      - src\prepare.py
     params:
       - prepare.seed
       - prepare.split
     outs:
-      - data/prepared
+      - data\prepared
   featurize:
-    cmd: python src/featurization.py data/prepared data/features
+    cmd: python src\featurization.py data\prepared data\features
     deps:
-      - data/prepared
-      - src/featurization.py
+      - data\prepared
+      - src\featurization.py
     params:
       - featurize.max_features
       - featurize.ngrams
     outs:
-      - data/features
+      - data\features
   train:
-    cmd: python src/train.py data/prepared data/features model.pkl
+    cmd: python src\train.py data\prepared data\features model.pkl
     deps:
-      - data/prepared
-      - data/features
-      - src/train.py
+      - data\prepared
+      - data\features
+      - src\train.py
     params:
       - train.min_split
       - train.n_est
       - train.seed
     outs:
       - model.pkl
+  evaluate:
+    cmd:
+      python src\evaluate.py model.pkl data\prepared data\features metrics\scores.json
+      metrics\prc.json metrics\roc.json
+    deps:
+      - data\features
+      - data\prepared
+      - model.pkl
+      - src\evaluate.py
+    metrics:
+      - metrics\scores.json:
+          cache: false
+    plots:
+      - metrics\prc.json:
+          cache: false
+          x: recall
+          y: precision
+      - metrics\roc.json:
+          cache: false
+          x: fpr
+          y: tpr
