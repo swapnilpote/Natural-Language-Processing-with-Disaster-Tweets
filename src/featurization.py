@@ -27,7 +27,13 @@ valid_output = os.path.join(sys.argv[2], "valid.pkl")
 test_output = os.path.join(sys.argv[2], "test.pkl")
 
 
-def word_featurize(in_file_path: str, op_file_path: str) -> pd.DataFrame:
+def word_featurize(in_file_path: str, op_file_path: str) -> None:
+    """This function generate features using TF-IDF method of scikit-learn
+
+    Args:
+        in_file_path (str): Input file path that should be featurized
+        op_file_path (str): Output file path to store featurized data
+    """
     df = pd.read_csv(in_file_path)
     os.makedirs(os.path.join("data", "features"), exist_ok=True)
 
@@ -47,6 +53,8 @@ def word_featurize(in_file_path: str, op_file_path: str) -> pd.DataFrame:
 
     with open(op_file_path, "wb") as f:
         joblib.dump(tfidf, f)
+
+    return None
 
 
 if __name__ == "__main__":
