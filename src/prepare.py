@@ -28,13 +28,13 @@ output_test = os.path.join("data", "prepared", "test.csv")
 
 
 def clean_text(text: str) -> str:
-    """[summary]
+    """It cleans the text and replace with more suitable version of particular word.
 
     Args:
-        text (str): [description]
+        text (str): Unprocessed single text record at time.
 
     Returns:
-        str: [description]
+        str: Processed single text record at time.
     """
     symbols = re.findall("[^a-zA-Z0-9#@'\\s]", text)
 
@@ -44,7 +44,7 @@ def clean_text(text: str) -> str:
     return text.lower()
 
 
-def main(file_path: str, data_type: str = "train") -> None:
+def preprocess(file_path: str, data_type: str = "train") -> None:
     """[summary]
 
     Args:
@@ -78,7 +78,9 @@ def main(file_path: str, data_type: str = "train") -> None:
     except Exception as ex:
         sys.stderr.write(ex)
 
+    return None
+
 
 if __name__ == "__main__":
-    main(train_input)
-    main(test_input, data_type="test")
+    preprocess(train_input)
+    preprocess(test_input, data_type="test")
