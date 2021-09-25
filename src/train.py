@@ -25,6 +25,13 @@ op_file = sys.argv[3]
 
 
 def model_train(in_prep_path: str, in_feat_path: str, op_file_path: str) -> None:
+    """Performs model training based on featurized training data.
+
+    Args:
+        in_prep_path (str): Prepared data file to extract labels.
+        in_feat_path (str): Featurized data file to extract numpy array.
+        op_file_path (str): Model file path.
+    """
     with open(os.path.join(in_feat_path, "train.pkl"), "rb") as fd:
         X = joblib.load(fd)
 
@@ -42,6 +49,8 @@ def model_train(in_prep_path: str, in_feat_path: str, op_file_path: str) -> None
 
     with open(op_file_path, "wb") as fd:
         joblib.dump(clf, fd)
+
+    return None
 
 
 if __name__ == "__main__":
