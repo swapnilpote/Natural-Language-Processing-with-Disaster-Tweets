@@ -60,7 +60,7 @@ def main(file_path: str, data_type: str = "train") -> None:
 
         # Clean text by separating special characteres from words
         df["text"] = df["text"].apply(clean_text)
-        df["text"] = df["text"].apply(lambda x: ' '.join(x.split()))
+        df["text"] = df["text"].apply(lambda x: " ".join(x.split()))
 
         # Generating root word using lemmatization technique
         lemmatizer = WordNetLemmatizer()
@@ -69,9 +69,7 @@ def main(file_path: str, data_type: str = "train") -> None:
         )
 
         if data_type == "train":
-            train, valid = train_test_split(df,
-                                            test_size=split,
-                                            random_state=seed)
+            train, valid = train_test_split(df, test_size=split, random_state=seed)
             train.to_csv(output_train, index=False)
             valid.to_csv(output_valid, index=False)
         else:
@@ -81,5 +79,6 @@ def main(file_path: str, data_type: str = "train") -> None:
         sys.stderr.write(ex)
 
 
-main(train_input)
-main(test_input, data_type="test")
+if __name__ == "__main__":
+    main(train_input)
+    main(test_input, data_type="test")
