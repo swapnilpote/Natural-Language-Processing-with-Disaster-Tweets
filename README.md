@@ -13,6 +13,7 @@ Competition link => https://www.kaggle.com/c/nlp-getting-started/
     - Make sure to check git command displayed on terminal after above command 
     - dvc remote add -d storage {url}
     - dvc push
+4. If we want to sync prepared, featurize or model.pkl files then we have to repeat step 3.
 
 
 ### DVC pipeline
